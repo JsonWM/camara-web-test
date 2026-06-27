@@ -45,13 +45,7 @@ export async function POST(request) {
 
         // PROMPT DE ALTA PRECISIÓN: Le indicamos su rol exacto y reglas de negocio
         const promptEspecializado = `
-      Actúa como un sistema experto en verificación de identidad (KYC) y OCR. 
-      Analiza minuciosamente la imagen adjunta para determinar si corresponde a un documento de identidad oficial, cédula, DNI o pasaporte.
-      
-      Reglas estrictas de validación:
-      1. Debe ser un documento de identidad oficial visible (no una foto de un paisaje, ni una selfie común sin documento).
-      2. El documento debe estar bien enfocado, ser legible y no estar excesivamente tapado con los dedos.
-      3. Extrae la información visible más importante si es posible (Nombre, Apellido, Número de documento).
+      Que ves en la imagen. Responde en forma breve y corta
     `;
 
         const response = await ai.models.generateContent({
