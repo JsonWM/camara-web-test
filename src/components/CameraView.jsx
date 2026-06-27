@@ -76,28 +76,31 @@ export default function CameraView() {
     const canvas = canvasRef.current;
 
     if (video && canvas) {
-      // LEER LAS DIMENSIONES REALES DEL VIDEO EN REPRODUCCIÓN (Evita imagen rota o chiquita)
-      const anchoReal = video.videoWidth || 640;
-      const altoReal = video.videoHeight || 480;
+      // Agregamos un retraso controlado para permitir la exposición de luz automática del hardware
+      setTimeout(() => {
+        // LEER LAS DIMENSIONES REALES DEL VIDEO EN REPRODUCCIÓN
+        const anchoReal = video.videoWidth || 640;
+        const altoReal = video.videoHeight || 480;
 
-      canvas.width = anchoReal;
-      canvas.height = altoReal;
-      
-      const context = canvas.getContext('2d');
-      // Dibujar la foto usando el tamaño real
-      context.drawImage(video, 0, 0, anchoReal, altoReal);
-      
-      const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9); // Calidad del 90%
-      setPhoto(imageDataUrl);
+        canvas.width = anchoReal;
+        canvas.height = altoReal;
+        
+        const context = canvas.getContext('2d');
+        // Capturar el cuadro estabilizado con luz real
+        context.drawImage(video, 0, 0, anchoReal, altoReal);
+        
+        const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9); // Calidad balanceada
+        setPhoto(imageDataUrl);
 
-      const binaryBlob = base64ToBlob(imageDataUrl);
-      setPhotoBlob(binaryBlob);
+        const binaryBlob = base64ToBlob(imageDataUrl);
+        setPhotoBlob(binaryBlob);
 
-      // Apagar cámara
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-      setStream(null);
+        // Apagar la cámara de forma segura una vez capturado el cuadro iluminado
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+        }
+        setStream(null);
+      }, 800); // 800 milisegundos son suficientes para que el sensor del celular calibre la luz
     }
   };
 
