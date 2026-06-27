@@ -12,19 +12,22 @@ export default function CameraPrototype() {
   const [serverMessage, setServerMessage] = useState('');
 
   const startCamera = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user' },
-        audio: false,
-      });
-      videoRef.current.srcObject = mediaStream;
-      setStream(mediaStream);
-      setServerMessage('');
-    } catch (err) {
-      console.error("Error de cámara:", err);
-      alert("Revisa los permisos de tu cámara.");
-    }
-  };
+  try {
+    const mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { 
+        // 'environment' fuerza el uso de la cámara trasera
+        facingMode: 'environment' 
+      },
+      audio: false,
+    });
+    videoRef.current.srcObject = mediaStream;
+    setStream(mediaStream);
+    setServerMessage('');
+  } catch (err) {
+    console.error("Error de cámara:", err);
+    alert("Revisa los permisos de tu cámara.");
+  }
+};
 
   const stopCamera = () => {
     if (stream) {
